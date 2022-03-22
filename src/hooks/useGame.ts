@@ -1,7 +1,7 @@
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 
 function calculateWinner(squares: number[]) {
-  const lines = [
+  const winLines = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -11,10 +11,10 @@ function calculateWinner(squares: number[]) {
     [0, 4, 8],
     [2, 4, 6],
   ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
+  for (let i = 0; i < winLines.length; i++) {
+    const [a, b, c] = winLines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return {player: squares[a], winLine: lines[i]};
+      return {player: squares[a], winLine: winLines[i]};
     }
   }
   return null;
@@ -27,8 +27,7 @@ const useGame = () => {
   const [squares, $squares] = useState(Array(9).fill(null));
   const [stepNumber, $stepNumber] = useState<number>(0);
 
-  const player =
-    stepNumber === 0 || stepNumber % 2 === 0 ? PlayerEnum.X : PlayerEnum.O;
+  const player = stepNumber % 2 === 0 ? PlayerEnum.X : PlayerEnum.O;
   const handlePress = (i: number) => {
     const newSquares = [...squares];
     newSquares[i] = player;
@@ -43,9 +42,14 @@ const useGame = () => {
     $stepNumber(0);
   };
   const winner = calculateWinner(squares);
-  const status = winner?.player
-    ? 'Winner Player:' + winner.player
-    : 'Current Move for Player: ' + player;
+  const status = useMemo(() => {
+    if (stepNumber === 9 && !winner?.player) {
+      return 'Game Is Over, Start New Game!';
+    }
+    return winner?.player
+      ? 'Winner Player:' + winner.player
+      : 'Current Move for Player: ' + player;
+  }, [winner, player, stepNumber]);
 
   return {
     handlePress,

@@ -1,13 +1,13 @@
 import React from 'react';
-import {StatusBar, Text} from 'react-native';
+import {StatusBar} from 'react-native';
 import Button from 'src/components/Button';
 import Player from 'src/components/Player';
 import useGame from 'src/hooks/useGame';
 import globals from 'src/resources/globals';
-import styled from 'styled-components/native';
+import {BoardItem, Board, BoardLineWrap, InfoText, NewGameBtn} from './styled';
 
 const Game = () => {
-  const {winner, handlePress, squares, status} = useGame();
+  const {winner, handlePress, squares, status, startNewGame} = useGame();
 
   const renderItem = (i: number) => {
     const isWinLine = winner?.winLine && winner.winLine.includes(i);
@@ -25,6 +25,7 @@ const Game = () => {
         backgroundColor={globals.colors.primary}
         barStyle="light-content"
       />
+      <InfoText bottom={20}>{status}</InfoText>
       <BoardLineWrap>
         {renderItem(0)}
         {renderItem(1)}
@@ -40,37 +41,13 @@ const Game = () => {
         {renderItem(7)}
         {renderItem(8)}
       </BoardLineWrap>
-      <Text>{status}</Text>
+      <Button onPress={startNewGame}>
+        <NewGameBtn>
+          <InfoText>Start New Game</InfoText>
+        </NewGameBtn>
+      </Button>
     </Board>
   );
 };
 
 export default Game;
-
-const BoardItemSize = globals.strings.width / 6 + 'px';
-
-const Board = styled.SafeAreaView`
-  padding: 20px;
-  background-color: ${globals.colors.primary};
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-`;
-const BoardLineWrap = styled.View`
-  width: 66%;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-`;
-const BoardItem = styled.View`
-  background-color: ${({active = false}: {active?: boolean}) =>
-    active ? globals.colors.active : globals.colors.primary};
-  border-width: 3px;
-  width: ${BoardItemSize};
-  height: ${BoardItemSize};
-  border-radius: 20px;
-  border-color: ${globals.colors.focus}
-  align-items: center;
-  justify-content: center;
-`;
