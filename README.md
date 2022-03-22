@@ -8,8 +8,8 @@ Instructions to run project:
         * cd ios && pod install
         * Open with xcode tictactoe.xcworkspace, setup profile and Run Project
   * Running on Android :
-      1)
+      (Option A)
         * cd android and Create local.properties by setting sdk.dir (Your Android SDK directory)
         * yarn android
-      2) Open
+      (Option B) Open
         * Open android folder with Android studio and run project
