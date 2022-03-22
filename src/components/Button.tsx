@@ -10,16 +10,14 @@ interface Props {
 }
 const Button = ({
   onPress = () => null,
-  activeScale = 0.95,
-  style = {},
+  activeScale = 0.98,
   children,
   disabled = false,
 }: Props): JSX.Element => (
   <TouchableScale
     activeScale={activeScale}
     disabled={disabled}
-    onPress={() => onPress()}
-    style={style}>
+    onPress={() => onPress()}>
     {children}
   </TouchableScale>
 );
